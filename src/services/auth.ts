@@ -23,7 +23,7 @@ export async function loginService(token: string): Promise<BaseService<User>> {
 	}
 
 	return {
-		data: response.data,
+		data: response.data.data,
 		errors,
 	}
 }

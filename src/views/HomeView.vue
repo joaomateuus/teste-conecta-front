@@ -1,35 +1,94 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { getContactsByDomainService } from '@/services/contacts';
+import { useAuthStore } from '@/stores/auth';
+import { storeToRefs } from 'pinia';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const page = ref(1)
-const items = Array.from({ length: 15 }, (k, v) => ({
-	title: 'Item ' + v + 1,
-	text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima, at placeat totam, magni doloremque veniam neque porro libero rerum unde voluptatem!',
-}))
+// Tipagem para os contatos
+interface Contact {
+	email: string;
+	name: string;
+}
 
+interface ContactsByDomain {
+	domain: string;
+	emails: Contact[];
+}
+
+const { logUserOut } = useAuthStore();
+const { user } = storeToRefs(useAuthStore());
+const router = useRouter();
+
+// const getUser = async () => {
+// 	await JSON.parse(localStorage.getItem('user'))
+// }
+const fetchContactsByDomain = async () => {
+	try {
+		console.log(user.value)
+		const response = await getContactsByDomainService(user.value!.google_resource_name);
+		if (response.data) {
+			contacts.value = response.data as ContactsByDomain[];
+			selectedDomain.value = contacts.value[0].domain;
+		}
+
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+
+onMounted(async () => {
+	fetchContactsByDomain();
+})
+
+// Dados mockados
+const contacts = ref<ContactsByDomain[]>([]);
+
+// Aba selecionada
+const selectedDomain = ref<string | null>(null);
+
+// Definir a aba inicial
+
+
+
+const filteredContacts = computed(() => {
+	return contacts.value.find((c) => c.domain === selectedDomain.value)?.emails || [];
+});
+
+const logoutUser = () => {
+	logUserOut();
+	router.push("/")
+}
+
+// Controle de drawer e paginação
 const drawer = ref(false);
+const page = ref(1);
+
 const itemsNav = ref([
 	{
-		title: 'Foo',
+		title: 'Contatos por Dominio',
 		value: 'foo',
 	},
+	// {
+	// 	title: 'Contatos',
+	// 	value: 'bar',
+	// },
+	// {
+	// 	title: 'Minha Conta',
+	// 	value: 'fizz',
+	// },
 	{
-		title: 'Bar',
-		value: 'bar',
-	},
-	{
-		title: 'Fizz',
-		value: 'fizz',
-	},
-	{
-		title: 'Buzz',
+		title: 'Logout',
 		value: 'buzz',
+		callback: logoutUser
 	},
-])
+]);
 </script>
 
+
 <template>
-	<div class="h-full w-full items-start justify-start">
+	<div class="flex items-center justify-center h-full w-full">
 		<v-layout>
 			<v-app-bar color="primary" prominent>
 				<v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -48,27 +107,37 @@ const itemsNav = ref([
 			</v-app-bar>
 
 			<v-navigation-drawer v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : undefined" temporary>
-				<v-list :items="itemsNav"></v-list>
+				<v-list>
+					<v-list-item v-for="(item, index) in itemsNav" :key="index" @click="item.callback">
+						<v-list-item-title>{{ item.title }}</v-list-item-title>
+					</v-list-item>
+				</v-list>
 			</v-navigation-drawer>
 		</v-layout>
 
-		<div class="flex flex-col items-center justify-center h-full p-12 m-12">
-			<div class="flex items-center justify-start w-full mb-4">
-				<span class="text-4xl">Contatos por Dominio</span>
+		<div class="flex flex-col items-center justify-center h-full w-full p-12 mt-16">
+			<div class="flex items-center justify-start w-4/6 mb-4">
+				<span class="text-4xl">Contatos por Domínio</span>
 			</div>
-			<div class="flex flex-col items-start justify-start h-full w-full mt-6">
-				<v-card>
-					<v-tabs bg-color="teal-darken-3" slider-color="teal-lighten-3" show-arrows>
-						<v-tab class="w-32" v-for="i in 5" :key="i" :text="'Item ' + i" :value="'tab-' + i"></v-tab>
+
+			<div class="flex flex-col items-start justify-start h-full w-4/6 mt-6">
+				<v-card class="w-full">
+					<v-tabs v-model="selectedDomain" class="bg-white text-black" show-arrows touchless>
+						<v-tab v-for="contact in contacts" :key="contact.domain" :value="contact.domain"
+							class="w-32 hover:border-b-2 hover:border-blue-300">
+							{{ contact.domain }}
+						</v-tab>
 					</v-tabs>
 				</v-card>
-				<div class="flex flex-col items-center justify-center h-full w-4/5">
-					<v-data-iterator :items="items" :page="page">
-						<template v-slot:default="{ items }">
-							<template v-for="(item, i) in items" :key="i">
-								<v-card v-bind="item.raw"></v-card>
 
-								<br>
+				<div class="p-8" v-if="selectedDomain">
+					<v-data-iterator :items="filteredContacts" :page="page">
+						<template v-slot:default="{ items }">
+							<template v-for="(item) in items" :key="item.raw.email">
+								<v-card class="w-64 h-42 mb-4 p-12 w-full">
+									<v-card-title>{{ item.raw.name }}</v-card-title>
+									<v-card-subtitle>{{ item.raw.email }}</v-card-subtitle>
+								</v-card>
 							</template>
 						</template>
 					</v-data-iterator>
@@ -77,3 +146,6 @@ const itemsNav = ref([
 		</div>
 	</div>
 </template>
+
+
+<style lang="css"></style>

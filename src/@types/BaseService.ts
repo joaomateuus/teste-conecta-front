@@ -1,6 +1,5 @@
-export interface BaseService<T> {
-	data?: T
-	errors?: Error | null
+interface DefaultSucessMessage {
+	msg: string
 }
 
 interface Error {
@@ -9,6 +8,8 @@ interface Error {
 	detail: string
 }
 
-export interface DefaultSucessMessage {
-	msg: string
+export interface BaseService<T> {
+	data?: T
+	message?: DefaultSucessMessage
+	errors?: Error | null
 }

@@ -28,6 +28,7 @@ export const useAuthStore = defineStore<'auth', State, {}, Actions>('auth', {
 
 			if (response.data) {
 				this.user = response.data
+				localStorage.setItem('user', JSON.stringify(this.user))
 				this.authenticated = true
 				this.loading = false
 			}
@@ -35,6 +36,7 @@ export const useAuthStore = defineStore<'auth', State, {}, Actions>('auth', {
 			return response
 		},
 		logUserOut() {
+			localStorage.removeItem('user')
 			this.user = null
 			this.authenticated = false
 		},
