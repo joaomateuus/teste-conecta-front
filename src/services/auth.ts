@@ -3,7 +3,15 @@ import type { BaseService } from '@/@types/BaseService'
 import type { User } from '@/@types/User'
 
 export async function loginService(token: string): Promise<BaseService<User>> {
-	const response = await httpClient.post('/auth/login', token)
+	const response = await httpClient.post(
+		'/auth/login',
+		{ token },
+		{
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	)
 	let errors = null
 
 	if (!response.data) {
