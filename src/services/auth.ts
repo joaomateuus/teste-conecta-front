@@ -2,7 +2,7 @@ import { httpClient } from './api'
 import type { BaseService } from '@/@types/BaseService'
 import type { User } from '@/@types/User'
 
-export async function login(token: string): Promise<BaseService<User>> {
+export async function loginService(token: string): Promise<BaseService<User>> {
 	const response = await httpClient.post('/auth/login', token)
 	let errors = null
 

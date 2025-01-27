@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { googleSdkLoaded } from "vue3-google-login";
+import { useRouter } from "vue-router";
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from "@/stores/auth";
+
+const router = useRouter();
+const { authenticateUser } = useAuthStore();
+const { authenticated } = storeToRefs(useAuthStore());
 
 const loginWithGoogleAccount = () => {
 	googleSdkLoaded((google) => {
@@ -14,8 +21,19 @@ const loginWithGoogleAccount = () => {
 	})
 }
 
-const handleApiLogin = (token: string) => {
-	console.log(token);
+const handleApiLogin = async (token: string) => {
+	try {
+		await authenticateUser(token);
+		if (authenticated) {
+			router.push('home');
+			return;
+		} else {
+			console.log("Lançar toast")
+		}
+
+	} catch (error) {
+		console.log(error);
+	}
 }
 </script>
 
