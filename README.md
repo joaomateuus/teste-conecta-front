@@ -1,45 +1,57 @@
-# teste-conecta-front
+# Super OrgContact - Front-End
 
-This template should help get you started developing with Vue 3 in Vite.
+Repositório do front-end da aplicação **Super OrgContact**, desenvolvida para listar e organizar contatos do Google por domínio.
 
-## Recommended IDE Setup
+## Tecnologias Utilizadas
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Vue.js
+- Vue Router
+- Firebase Hosting
+- Material Design para UI com Vuetify
+- OAuth2 com Google Login
 
-## Type Support for `.vue` Imports in TS
+## Funcionalidades
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Login com Google utilizando OAuth2.
+- Listagem de contatos do Google agrupados por domínio.
+- Proteção de rotas para impedir o acesso de usuários não autenticados.
 
-## Customize configuration
+## Pré-requisitos
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Node.js (>= 14.x)
+- Yarn ou npm
 
 ## Project Setup
 
 ```sh
 npm install
+yarn install
 ```
 
-### Compile and Hot-Reload for Development
+### Compilar e Hot-Reload para Desenvolvimento
 
 ```sh
 npm run dev
+yarn dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Verificação de Tipos, Compilação e Minificação para Produção
 
 ```sh
 npm run build
+yarn build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Executar Testes Unitários com [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
+yarn test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Verificar Código com [ESLint](https://eslint.org/)
 
 ```sh
 npm run lint
+yarn lint
 ```
