@@ -91,9 +91,11 @@ const itemsNav = ref([
 	<div class="flex items-center justify-center h-full w-full">
 		<v-layout>
 			<v-app-bar color="primary" prominent>
-				<v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+				<v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
+					<img class="h-5 w-5" src="../assets/burger-menu.png" alt="Agenda" />
+				</v-app-bar-nav-icon>
 
-				<v-toolbar-title>Super OrgContact - ORGANIZAÇÃO DE CONTATOS</v-toolbar-title>
+				<v-toolbar-title>OrgContact - ORGANIZAÇÃO DE CONTATOS</v-toolbar-title>
 
 				<v-spacer></v-spacer>
 
