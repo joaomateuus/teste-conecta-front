@@ -55,3 +55,18 @@ yarn test:unit
 npm run lint
 yarn lint
 ```
+
+## URL do Deploy
+
+O projeto foi implantado para acesso público, permitindo que você o utilize sem a necessidade de configuração local.
+
+- **Front-End:** O front-end está hospedado no Firebase Hosting e pode ser acessado através do seguinte link:
+
+  ```
+    https://vue-teste-conecta.web.app/
+  ```
+
+- **Back-End:** O back-end está hospedado no Google Cloud Run e pode ser acessado através do seguinte link:
+  ```
+  https://sapient-fabric-322416.uc.r.appspot.com
+  ```
